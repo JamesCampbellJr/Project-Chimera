@@ -1,0 +1,15 @@
+#.gitignore
+__pycache__/
+*.pyc
+*.pyo
+*pyd
+.Python
+env/
+venv/
+.env
+*.egg-info/
+dist/
+build/
+
+#Ollama models (can be large)
+/ollama_data/
