@@ -11,5 +11,6 @@ venv/
 dist/
 build/
 
+
 #Ollama models (can be large)
 /ollama_data/
