@@ -1,0 +1,17 @@
+# /requirements.txt
+# Core AI and ML
+torch
+transformers
+openai-whisper
+ollama
+
+# PC Control and Perception
+pyautogui
+mss
+sounddevice
+numpy
+scipy
+
+# Utilities
+pyttsx3
+python-dotenv

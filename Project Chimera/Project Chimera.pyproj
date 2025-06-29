@@ -4,13 +4,15 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>46fe89d4-6af0-451b-99de-57049afe0f6d</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Project_Chimera.py</StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>Project Chimera</Name>
     <RootNamespace>Project Chimera</RootNamespace>
+    <IsWindowsApplication>False</IsWindowsApplication>
+    <InterpreterId>Global|PythonCore|3.13</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,6 +24,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="config.py" />
+    <Compile Include="core\action.py" />
+    <Compile Include="agent.py" />
+    <Compile Include="core\cognition.py" />
+    <Compile Include="orchestrator.py" />
+    <Compile Include="core\perception.py" />
+    <Compile Include="core\tutor_agent.py" />
+    <Compile Include="core\voice_interface.py" />
     <Compile Include="main.py" />
     <Compile Include="Project_Chimera.py" />
   </ItemGroup>
@@ -29,6 +38,13 @@
     <Content Include=".env" />
     <Content Include=".gitignore" />
     <Content Include="LICENSE" />
+    <Content Include="requirements.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="core\" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.13" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
