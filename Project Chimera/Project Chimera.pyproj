@@ -13,6 +13,7 @@
     <RootNamespace>Project Chimera</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
     <InterpreterId>Global|PythonCore|3.13</InterpreterId>
+    <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,6 +38,8 @@
   <ItemGroup>
     <Content Include=".env" />
     <Content Include=".gitignore" />
+    <Content Include="docker-compose.yaml" />
+    <Content Include="Dockerfile" />
     <Content Include="LICENSE" />
     <Content Include="requirements.txt" />
   </ItemGroup>

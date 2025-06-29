@@ -1,0 +1,41 @@
+# /docker-compose.yml
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama_data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  chimera:
+    build: .
+    container_name: project_chimera
+    depends_on:
+      - ollama
+    # Mount the skills directory to persist learned skills
+    volumes:
+      - ./skills:/app/skills
+    # Necessary for GUI control and audio
+    privileged: true # Required for pyautogui to control the host
+    ipc: host
+    pid: host
+    network_mode: host # Simplifies access to host devices (audio, screen)
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
