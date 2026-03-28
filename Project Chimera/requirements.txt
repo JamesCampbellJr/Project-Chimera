@@ -15,3 +15,6 @@ scipy
 # Utilities
 pyttsx3
 python-dotenv
+
+# Solana Paper-Trading Bot
+requests
