@@ -14,3 +14,9 @@ build/
 
 #Ollama models (can be large)
 /ollama_data/
+
+# Runtime data directories (generated at runtime)
+/memory_store/
+/business_data/
+/projects/
+/skills/

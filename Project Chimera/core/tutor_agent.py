@@ -4,10 +4,13 @@ import logging
 import os
 import json
 
+import ollama
+
 from agent import Agent
 from core.perception import Perception
 from core.cognition import Cognition
 from core.action import Action
+import config
 
 class AthenaAgent(Agent):
     """
@@ -87,7 +90,7 @@ class AthenaAgent(Agent):
         - "plan": The JSON array of action objects.
         """
         
-        response = await self.cognition.cognition_client.chat(
+        response = await ollama.AsyncClient().chat(
             model=config.COGNITIVE_MODEL,
             messages=[{'role': 'user', 'content': synthesis_prompt}],
             format='json'
