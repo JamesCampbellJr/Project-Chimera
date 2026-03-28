@@ -1,0 +1,6 @@
+# Build artifacts (exclude compiled intermediate files)
+*.class
+*.dex
+/tmp/
+# Keep the APK file for download
+# Do NOT ignore *.apk
