@@ -360,5 +360,7 @@ MigrationBackup/
 .ionide/
 
 # Fody - auto-generated XML schema
-FodyWeavers.xsd# Add Python test cache
+FodyWeavers.xsd
+
+# Add Python test cache
 .pytest_cache/
