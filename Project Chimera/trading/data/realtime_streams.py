@@ -457,6 +457,7 @@ class RealtimeDataStream:
             raise RuntimeError("No HTTP session available")
 
         last_slot: int = 0
+        sol_price_usd: float = 0.0
 
         while self._running:
             try:
@@ -470,6 +471,23 @@ class RealtimeDataStream:
                     current_slot = data.get("result", 0)
 
                 if current_slot <= last_slot:
+                    await asyncio.sleep(2.0)
+                    continue
+
+                # Refresh SOL price periodically from CoinGecko
+                try:
+                    async with session.get(
+                        "https://api.coingecko.com/api/v3/simple/price",
+                        params={"ids": "solana", "vs_currencies": "usd"},
+                        timeout=aiohttp.ClientTimeout(total=10),
+                    ) as price_resp:
+                        price_resp.raise_for_status()
+                        price_data = await price_resp.json()
+                        sol_price_usd = float(price_data.get("solana", {}).get("usd", sol_price_usd))
+                except Exception:
+                    logger.debug("Could not refresh SOL price; using cached value %.2f", sol_price_usd)
+
+                if sol_price_usd <= 0:
                     await asyncio.sleep(2.0)
                     continue
 
@@ -515,9 +533,7 @@ class RealtimeDataStream:
                     for i, (pre, post) in enumerate(zip(pre_balances, post_balances)):
                         diff_lamports = post - pre
                         diff_sol = abs(diff_lamports) / 1e9
-                        # Rough USD estimation (placeholder; real implementation
-                        # would use current SOL price)
-                        diff_usd = diff_sol * 150.0
+                        diff_usd = diff_sol * sol_price_usd
 
                         if diff_usd >= threshold_usd:
                             key = account_keys[i] if i < len(account_keys) else {}

@@ -3,6 +3,8 @@
 Provides multi-source price aggregation with outlier rejection, VWAP
 calculation, time-series resampling/alignment, and a unified market
 view for downstream strategy consumers.
+
+Combines and normalizes data from multiple on-chain and off-chain feeds.
 """
 
 import logging
