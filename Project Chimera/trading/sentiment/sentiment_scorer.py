@@ -311,10 +311,9 @@ class SentimentScorer:
             try:
                 posts = await self._social_analyzer.analyze_twitter(token, limit=100)
                 if posts:
-                    from .news_analyzer import NewsAnalyzer as _NA
-                    _text_analyzer = _NA()
+                    text_analyzer = self._news_analyzer or NewsAnalyzer()
                     scores = [
-                        _text_analyzer.analyze_text_sentiment(p.content).score
+                        text_analyzer.analyze_text_sentiment(p.content).score
                         for p in posts
                     ]
                     social_score = sum(scores) / len(scores) if scores else 0.0

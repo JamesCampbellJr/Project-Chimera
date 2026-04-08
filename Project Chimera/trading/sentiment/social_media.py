@@ -481,11 +481,13 @@ class SocialMediaAnalyzer:
             logger.error("Discord webhook request failed: %s", exc)
             return {}
 
+        guild = data.get("guild")
+        guild_name = guild.get("name", "") if isinstance(guild, dict) else ""
         result = {
             "guild_id": data.get("guild_id"),
             "channel_id": data.get("channel_id"),
             "name": data.get("name", ""),
-            "guild_name": data.get("guild", {}).get("name", "") if isinstance(data.get("guild"), dict) else "",
+            "guild_name": guild_name,
         }
         logger.info("Discord webhook info: %s", result.get("name", "unknown"))
         return result

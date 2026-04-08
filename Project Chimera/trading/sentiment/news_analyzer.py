@@ -429,7 +429,6 @@ class NewsAnalyzer:
         # Fetch recent commits (last 30 days)
         recent_commits = 0
         try:
-            since = datetime.now(timezone.utc).isoformat()
             commits_url = f"{api_base}/commits?per_page=100&since={_days_ago_iso(30)}"
             async with session.get(commits_url, headers=headers) as resp:
                 if resp.status == 200:
