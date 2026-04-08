@@ -227,8 +227,8 @@ class IsolationForest:
             return current_height + self._c(tree_node.size)
 
         # Determine which branch to follow
-        assert tree_node.split_feature is not None
-        assert tree_node.split_value is not None
+        if tree_node.split_feature is None or tree_node.split_value is None:
+            return current_height + self._c(tree_node.size)
 
         if sample[tree_node.split_feature] < tree_node.split_value:
             return self._path_length(sample, tree_node.left, current_height + 1)  # type: ignore[arg-type]
