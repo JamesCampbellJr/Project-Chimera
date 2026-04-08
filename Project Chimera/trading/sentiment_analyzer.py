@@ -136,7 +136,9 @@ class SentimentAnalyzer:
                 score = coin.get("score", 0)
 
                 # Trending = positive momentum signal (mild bullish)
-                sentiment = min(0.3 + (1.0 - score / 10.0) * 0.4, 1.0)
+                # Clamp score to [0, 10] to avoid negative sentiment
+                clamped_score = max(0, min(score, 10))
+                sentiment = max(0.1, min(0.3 + (1.0 - clamped_score / 10.0) * 0.4, 1.0))
 
                 record = {
                     "token_address": symbol,

@@ -195,7 +195,9 @@ class TradingBot:
                 if closed:
                     logger.info("Closed %d position(s) this iteration.", len(closed))
                     for trade in closed:
-                        self.risk.record_trade_outcome(trade.get("outcome", ""))
+                        outcome = trade.get("outcome", "")
+                        if outcome in ("WIN", "LOSS"):
+                            self.risk.record_trade_outcome(outcome)
 
                 # 8. Summary
                 await loop.run_in_executor(None, self.trader.print_summary)

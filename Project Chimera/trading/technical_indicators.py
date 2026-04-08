@@ -265,8 +265,8 @@ class TechnicalIndicators:
         # MACD line = fast EMA - slow EMA
         macd_line = [f - s for f, s in zip(fast_ema, slow_ema)]
 
-        # Signal line = EMA of MACD line
-        signal_line = ema(macd_line[-signal_period:], signal_period)
+        # Signal line = EMA of full MACD line history
+        signal_line = ema(macd_line, signal_period)
 
         if not signal_line:
             return None

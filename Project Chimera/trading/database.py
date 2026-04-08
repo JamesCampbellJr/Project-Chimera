@@ -482,14 +482,15 @@ def get_manipulation_flags(
     hours: int = 24,
 ) -> list[dict]:
     """Return manipulation flags for a token from the last *hours*."""
+    interval = f"-{hours} hours"
     rows = conn.execute(
         """
         SELECT * FROM manipulation_flags
         WHERE token_address = ?
-          AND detected_at >= datetime('now', ? || ' hours')
+          AND detected_at >= datetime('now', ?)
         ORDER BY detected_at DESC
         """,
-        (token_address, f"-{hours}"),
+        (token_address, interval),
     ).fetchall()
     return [dict(r) for r in rows]
 
