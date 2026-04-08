@@ -116,10 +116,12 @@ class WhaleTracker:
             owners: list[tuple[str, float]] = []
             for acct in accounts:
                 acct_address = acct.get("address", "")
-                ui_amount = float(
-                    acct.get("uiAmount")
-                    or (acct.get("amount", "0") if isinstance(acct.get("amount"), (int, float)) else 0)
-                )
+                raw_ui = acct.get("uiAmount")
+                if raw_ui is not None:
+                    ui_amount = float(raw_ui)
+                else:
+                    amt = acct.get("amount", 0)
+                    ui_amount = float(amt) if isinstance(amt, (int, float)) else 0.0
                 owner = await loop.run_in_executor(
                     None, lambda addr=acct_address: self._resolve_owner(addr)
                 )

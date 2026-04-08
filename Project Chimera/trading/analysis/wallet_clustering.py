@@ -178,8 +178,8 @@ class WalletClusterer:
                 addrs: list[str] = []
                 for k in keys:
                     addr = k.get("pubkey", k) if isinstance(k, dict) else str(k)
-                    # Skip program / system addresses (short or well-known).
-                    if len(addr) >= 32:
+                    # Solana base58 addresses are 32–44 chars long.
+                    if 32 <= len(addr) <= 44:
                         addrs.append(addr)
 
                 address_set.update(addrs)
