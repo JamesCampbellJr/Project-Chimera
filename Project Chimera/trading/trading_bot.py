@@ -1,15 +1,19 @@
 # trading/trading_bot.py
 """
-Solana Paper-Trading Bot — main orchestrator for the trading subsystem.
+Solana Paper-Trading Bot — "Project Phoenix" — main orchestrator for the
+trading subsystem.
 
 Lifecycle
 ---------
 1. Seed / refresh wallet analysis (wallet_analyzer).
-2. Detect / refresh patterns (pattern_detector).
-3. For every active pattern above the confidence threshold, emit a buy
-   signal to the paper trader.
-4. On every subsequent iteration, re-price open positions (evaluate_open_positions).
-5. Persist all state to SQLite and log a running summary.
+2. Fetch and score sentiment data (sentiment_analyzer).
+3. Scan for manipulation / fake trades (fake_trade_detector).
+4. Detect / refresh patterns (pattern_detector).
+5. For every active pattern above the confidence threshold, run through
+   risk management and sentiment checks before issuing a buy signal.
+6. On every subsequent iteration, re-price open positions with adaptive
+   stop-loss, trailing stop, and take-profit via the risk manager.
+7. Check circuit breakers and persist all state to SQLite.
 
 Run as a standalone script::
 
@@ -30,23 +34,33 @@ from trading.solana_client import SolanaClient
 from trading.wallet_analyzer import WalletAnalyzer
 from trading.pattern_detector import PatternDetector
 from trading.paper_trader import PaperTrader
+from trading.sentiment_analyzer import SentimentAnalyzer
+from trading.fake_trade_detector import FakeTradeDetector
+from trading.risk_manager import RiskManager
+from trading.technical_indicators import TechnicalIndicators
 
 logger = logging.getLogger(__name__)
 
 
 class TradingBot:
     """
-    Coordinates the wallet analysis → pattern detection → paper trading loop.
+    Coordinates the full Project Phoenix trading pipeline:
+    wallet analysis → sentiment → manipulation scan → pattern detection →
+    risk management → paper trading.
     """
 
     def __init__(self):
-        self.conn    = init_db()
-        self.client  = SolanaClient()
-        self.analyzer  = WalletAnalyzer(solana_client=self.client)
-        self.detector  = PatternDetector()
-        self.trader    = PaperTrader(solana_client=self.client)
-        self._running  = False
-        logger.info("TradingBot ready.")
+        self.conn       = init_db()
+        self.client     = SolanaClient()
+        self.analyzer   = WalletAnalyzer(solana_client=self.client)
+        self.detector   = PatternDetector()
+        self.trader     = PaperTrader(solana_client=self.client)
+        self.sentiment  = SentimentAnalyzer()
+        self.fake_detector = FakeTradeDetector()
+        self.risk       = RiskManager()
+        self.indicators = TechnicalIndicators()
+        self._running   = False
+        logger.info("TradingBot (Project Phoenix) ready.")
 
     # ---------------------------------------------------------------------- #
     # Public                                                                   #
@@ -74,20 +88,49 @@ class TradingBot:
 
         while self._running:
             iteration += 1
-            logger.info("--- Iteration %d ---", iteration)
+            logger.info("=== Iteration %d ===", iteration)
             loop = asyncio.get_running_loop()
 
             try:
+                # 0. Check circuit breaker before doing anything
+                if self.risk.check_circuit_breaker():
+                    logger.warning("Circuit breaker active — skipping trading this iteration.")
+                    summary = get_performance_summary(self.conn)
+                    self._log_profitability_progress(summary)
+                    if iterations and iteration >= iterations:
+                        break
+                    await asyncio.sleep(config.TRADING_LOOP_INTERVAL)
+                    continue
+
                 # 1. Analyse wallets (blocking I/O → thread pool)
                 logger.info("Step 1: Analysing tracked wallets …")
                 await loop.run_in_executor(None, self.analyzer.analyse_all_tracked)
 
-                # 2. Detect patterns
-                logger.info("Step 2: Detecting patterns …")
+                # 2. Fetch and score sentiment data
+                logger.info("Step 2: Fetching sentiment data …")
+                await loop.run_in_executor(None, self.sentiment.fetch_and_score_news)
+                await loop.run_in_executor(None, self.sentiment.fetch_trending_sentiment)
+                market_sentiment = await loop.run_in_executor(
+                    None, self.sentiment.get_market_sentiment
+                )
+                logger.info("Market sentiment: %.2f", market_sentiment)
+
+                # 3. Scan for manipulation / fake trades
+                logger.info("Step 3: Scanning for manipulation …")
+                manipulation_flags = await loop.run_in_executor(
+                    None, self.fake_detector.scan_all
+                )
+                if manipulation_flags:
+                    logger.warning(
+                        "⚠ %d manipulation flag(s) detected!", len(manipulation_flags)
+                    )
+
+                # 4. Detect patterns
+                logger.info("Step 4: Detecting patterns …")
                 patterns = await loop.run_in_executor(None, self.detector.detect_all)
                 logger.info("Patterns available: %d", len(patterns))
 
-                # 3. Retrieve active patterns that meet the confidence bar
+                # 5. Retrieve active patterns that meet the confidence bar
                 active = await loop.run_in_executor(
                     None,
                     self.detector.get_active_patterns,
@@ -95,24 +138,66 @@ class TradingBot:
                 )
                 logger.info("Active (high-confidence) patterns: %d", len(active))
 
-                # 4. Issue buy signals for each active pattern
+                # 6. Issue buy signals — with sentiment and manipulation checks
+                signals_issued = 0
+                signals_blocked = 0
                 for pattern in active:
+                    token_address = pattern.get("token_address")
+                    if not token_address:
+                        continue
+
+                    # 6a. Check manipulation flags
+                    is_safe, safety_reason = await loop.run_in_executor(
+                        None, self.fake_detector.is_safe_to_trade, token_address
+                    )
+                    if not is_safe:
+                        logger.info("BLOCKED (manipulation): %s — %s", token_address, safety_reason)
+                        signals_blocked += 1
+                        continue
+
+                    # 6b. Check sentiment
+                    should_trade, sent_reason = await loop.run_in_executor(
+                        None, self.sentiment.should_trade, token_address
+                    )
+                    if not should_trade:
+                        logger.info("BLOCKED (sentiment): %s — %s", token_address, sent_reason)
+                        signals_blocked += 1
+                        continue
+
+                    # 6c. Compute position size via risk manager
+                    signal_score = pattern.get("success_rate", 0.0)
+                    position_usd = await loop.run_in_executor(
+                        None, self.risk.compute_position_size, signal_score, None
+                    )
+                    if position_usd <= 0:
+                        logger.info("BLOCKED (risk): position size = 0 for %s", token_address)
+                        signals_blocked += 1
+                        continue
+
                     signal = {
                         **pattern,
-                        "signal_score": pattern.get("success_rate", 0.0),
+                        "signal_score": signal_score,
+                        "position_size_usd": position_usd,
                     }
                     await loop.run_in_executor(
                         None, self.trader.execute_buy_signal, signal
                     )
+                    signals_issued += 1
 
-                # 5. Evaluate open positions
+                logger.info(
+                    "Signals: %d issued, %d blocked.", signals_issued, signals_blocked
+                )
+
+                # 7. Evaluate open positions (with risk manager exit logic)
                 closed = await loop.run_in_executor(
                     None, self.trader.evaluate_open_positions
                 )
                 if closed:
                     logger.info("Closed %d position(s) this iteration.", len(closed))
+                    for trade in closed:
+                        self.risk.record_trade_outcome(trade.get("outcome", ""))
 
-                # 6. Summary
+                # 8. Summary
                 await loop.run_in_executor(None, self.trader.print_summary)
 
                 summary = get_performance_summary(self.conn)
