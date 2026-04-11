@@ -247,12 +247,7 @@ class TradingBot:
             # Anti-manipulation: check for honeypot / rug risk
             if self.fake_trade_detector and token:
                 try:
-                    risk_assessment = await loop.run_in_executor(
-                        None,
-                        lambda t=token: asyncio.get_event_loop().run_until_complete(
-                            self.fake_trade_detector.get_token_risk(t)
-                        ) if asyncio.get_event_loop().is_running() else None,
-                    )
+                    risk_assessment = await self.fake_trade_detector.get_token_risk(token)
                     if risk_assessment and risk_assessment.overall_risk > config.RUG_RISK_THRESHOLD:
                         logger.warning(
                             "Skipping token %s — rug risk %.2f > threshold %.2f",
