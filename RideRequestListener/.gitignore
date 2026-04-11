@@ -1,0 +1,14 @@
+# Gradle build cache
+.gradle/
+build/
+local.properties
+
+# IDE files
+.idea/
+*.iml
+
+# Keep APK file for download/testing
+# Do NOT ignore *.apk
+
+# Exclude APK signature file (already embedded in APK)
+*.idsig
