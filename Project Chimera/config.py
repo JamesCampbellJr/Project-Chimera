@@ -68,6 +68,87 @@ PATTERN_CONSISTENCY_WIN_RATE = float(
 # --- Bot Loop ---
 TRADING_LOOP_INTERVAL = int(os.getenv("TRADING_LOOP_INTERVAL", "300"))  # seconds between iterations
 
+# ==========================================================================
+# Advanced Trading Modules
+# ==========================================================================
+
+# --- Risk Management ---
+KELLY_FRACTION           = float(os.getenv("KELLY_FRACTION",           "0.25"))  # fractional Kelly safety
+MAX_PORTFOLIO_CONCENTRATION = float(os.getenv("MAX_PORTFOLIO_CONCENTRATION", "20.0"))  # % max in one token
+MAX_DAILY_LOSS_PCT       = float(os.getenv("MAX_DAILY_LOSS_PCT",       "5.0"))   # % of portfolio
+MAX_OPEN_POSITIONS       = int(os.getenv("MAX_OPEN_POSITIONS",         "10"))
+ATR_STOP_MULTIPLIER      = float(os.getenv("ATR_STOP_MULTIPLIER",     "2.0"))
+TRAILING_STOP_PCT        = float(os.getenv("TRAILING_STOP_PCT",        "5.0"))
+MAX_HOLD_HOURS           = int(os.getenv("MAX_HOLD_HOURS",             "72"))
+CIRCUIT_BREAKER_DROP_PCT = float(os.getenv("CIRCUIT_BREAKER_DROP_PCT", "5.0"))   # flash crash threshold
+CIRCUIT_BREAKER_WINDOW   = int(os.getenv("CIRCUIT_BREAKER_WINDOW",     "60"))    # seconds
+VAR_CONFIDENCE_95        = float(os.getenv("VAR_CONFIDENCE_95",        "0.95"))
+VAR_CONFIDENCE_99        = float(os.getenv("VAR_CONFIDENCE_99",        "0.99"))
+
+# --- Execution ---
+DEFAULT_SLIPPAGE_BPS     = float(os.getenv("DEFAULT_SLIPPAGE_BPS",     "50.0"))  # 0.5 %
+JUPITER_API_URL          = os.getenv("JUPITER_API_URL", "https://quote-api.jup.ag/v6")
+MAX_RETRIES              = int(os.getenv("MAX_RETRIES",                "3"))
+RETRY_BACKOFF_BASE       = float(os.getenv("RETRY_BACKOFF_BASE",       "1.5"))   # seconds
+TX_CONFIRM_TIMEOUT       = int(os.getenv("TX_CONFIRM_TIMEOUT",        "60"))     # seconds
+JITO_TIP_LAMPORTS        = int(os.getenv("JITO_TIP_LAMPORTS",         "10000"))  # tip for MEV protection
+
+# --- Sentiment ---
+SENTIMENT_WEIGHT_NEWS    = float(os.getenv("SENTIMENT_WEIGHT_NEWS",    "0.3"))
+SENTIMENT_WEIGHT_SOCIAL  = float(os.getenv("SENTIMENT_WEIGHT_SOCIAL",  "0.4"))
+SENTIMENT_WEIGHT_ONCHAIN = float(os.getenv("SENTIMENT_WEIGHT_ONCHAIN", "0.3"))
+SENTIMENT_EMA_PERIOD     = int(os.getenv("SENTIMENT_EMA_PERIOD",       "14"))
+SENTIMENT_EXTREME_THRESHOLD = float(os.getenv("SENTIMENT_EXTREME_THRESHOLD", "0.8"))
+
+# --- Anti-Manipulation ---
+ANOMALY_CONTAMINATION    = float(os.getenv("ANOMALY_CONTAMINATION",    "0.1"))   # isolation forest
+VOLUME_ZSCORE_THRESHOLD  = float(os.getenv("VOLUME_ZSCORE_THRESHOLD",  "3.0"))
+PUMP_SCHEME_WALLET_BURST = int(os.getenv("PUMP_SCHEME_WALLET_BURST",   "10"))    # new wallets in window
+MIN_HHI_SAFE             = float(os.getenv("MIN_HHI_SAFE",            "0.25"))   # ownership concentration
+RUG_RISK_THRESHOLD       = float(os.getenv("RUG_RISK_THRESHOLD",       "0.7"))   # 0-1, above = risky
+
+# --- ML Models ---
+LSTM_HIDDEN_SIZE         = int(os.getenv("LSTM_HIDDEN_SIZE",           "64"))
+LSTM_NUM_LAYERS          = int(os.getenv("LSTM_NUM_LAYERS",            "2"))
+LSTM_DROPOUT             = float(os.getenv("LSTM_DROPOUT",             "0.2"))
+LSTM_SEQUENCE_LENGTH     = int(os.getenv("LSTM_SEQUENCE_LENGTH",       "30"))
+GBT_N_ESTIMATORS         = int(os.getenv("GBT_N_ESTIMATORS",          "100"))
+GBT_LEARNING_RATE        = float(os.getenv("GBT_LEARNING_RATE",        "0.1"))
+GBT_MAX_DEPTH            = int(os.getenv("GBT_MAX_DEPTH",             "6"))
+RL_REPLAY_BUFFER_SIZE    = int(os.getenv("RL_REPLAY_BUFFER_SIZE",      "10000"))
+RL_BATCH_SIZE            = int(os.getenv("RL_BATCH_SIZE",              "64"))
+RL_GAMMA                 = float(os.getenv("RL_GAMMA",                 "0.99"))
+RL_EPSILON_START          = float(os.getenv("RL_EPSILON_START",         "1.0"))
+RL_EPSILON_END            = float(os.getenv("RL_EPSILON_END",           "0.01"))
+RL_EPSILON_DECAY          = float(os.getenv("RL_EPSILON_DECAY",         "0.995"))
+
+# --- Backtesting ---
+BACKTEST_SLIPPAGE_BPS    = float(os.getenv("BACKTEST_SLIPPAGE_BPS",    "10.0"))
+BACKTEST_FAILURE_RATE    = float(os.getenv("BACKTEST_FAILURE_RATE",     "0.02"))
+BACKTEST_COMMISSION_BPS  = float(os.getenv("BACKTEST_COMMISSION_BPS",  "5.0"))
+
+# --- Strategies ---
+ARB_FEE_PCT              = float(os.getenv("ARB_FEE_PCT",              "0.3"))   # per swap
+ARB_MIN_PROFIT_PCT       = float(os.getenv("ARB_MIN_PROFIT_PCT",       "0.1"))   # minimum to act
+ARB_OPPORTUNITY_TTL      = int(os.getenv("ARB_OPPORTUNITY_TTL",        "10"))    # seconds
+SNIPE_MIN_LIQUIDITY_USD  = float(os.getenv("SNIPE_MIN_LIQUIDITY_USD",  "5000.0"))
+SNIPE_MAX_RUG_RISK       = float(os.getenv("SNIPE_MAX_RUG_RISK",       "0.5"))
+MM_GAMMA                 = float(os.getenv("MM_GAMMA",                 "0.1"))   # risk aversion
+MM_MAX_INVENTORY         = float(os.getenv("MM_MAX_INVENTORY",         "1000.0"))
+
+# --- Monitoring ---
+METRICS_RETENTION_HOURS  = int(os.getenv("METRICS_RETENTION_HOURS",    "168"))   # 7 days
+ALERT_WEBHOOK_URL        = os.getenv("ALERT_WEBHOOK_URL", "")
+ALERT_COOLDOWN_SECONDS   = int(os.getenv("ALERT_COOLDOWN_SECONDS",     "300"))
+
+# --- Learning ---
+RETRAIN_INTERVAL_HOURS   = int(os.getenv("RETRAIN_INTERVAL_HOURS",    "24"))
+DRIFT_PSI_THRESHOLD      = float(os.getenv("DRIFT_PSI_THRESHOLD",      "0.2"))
+DRIFT_KS_THRESHOLD       = float(os.getenv("DRIFT_KS_THRESHOLD",       "0.1"))
+GA_POPULATION_SIZE       = int(os.getenv("GA_POPULATION_SIZE",         "20"))
+GA_MUTATION_RATE         = float(os.getenv("GA_MUTATION_RATE",          "0.1"))
+GA_GENERATIONS           = int(os.getenv("GA_GENERATIONS",              "50"))
+
 # --- Seed Wallets ---
 # Well-known Solana DeFi power-users used as starting points for analysis.
 # Add or replace entries via the SEED_WALLETS env var (comma-separated).

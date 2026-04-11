@@ -18,3 +18,5 @@ python-dotenv
 
 # Solana Paper-Trading Bot
 requests
+aiohttp
+websockets

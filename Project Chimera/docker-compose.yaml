@@ -26,11 +26,15 @@ services:
     # Mount the skills directory to persist learned skills
     volumes:
       - ./skills:/app/skills
+      - ./trading_data:/app/trading  # persist trading DB
     # Necessary for GUI control and audio
     privileged: true # Required for pyautogui to control the host
     ipc: host
     pid: host
     network_mode: host # Simplifies access to host devices (audio, screen)
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      - TRADING_DB_PATH=trading/chimera_trading.db
     deploy:
       resources:
         reservations:
@@ -38,4 +42,17 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+    restart: unless-stopped
+
+  trading-bot:
+    build: .
+    container_name: chimera_trading_bot
+    command: python -m trading.trading_bot
+    volumes:
+      - ./trading_data:/app/trading  # persist trading DB
+    environment:
+      - SOLANA_RPC_URL=${SOLANA_RPC_URL:-https://api.mainnet-beta.solana.com}
+      - TRADING_DB_PATH=trading/chimera_trading.db
+      - TRADING_LOOP_INTERVAL=${TRADING_LOOP_INTERVAL:-300}
+      - PAPER_TRADING_STARTING_BALANCE=${PAPER_TRADING_STARTING_BALANCE:-10000.0}
     restart: unless-stopped
