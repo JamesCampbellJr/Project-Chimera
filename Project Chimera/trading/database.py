@@ -9,6 +9,9 @@ wallet_transactions  — raw swap transactions fetched from the chain
 patterns             — detected trading patterns and their success rates
 paper_trades         — every paper trade executed by the bot
 portfolio            — current paper-portfolio snapshot (one row per token)
+sentiment_data       — sentiment records from news/social sources
+manipulation_flags   — detected market manipulation flags per token
+technical_indicators — computed technical indicator values per token
 """
 
 import sqlite3
@@ -111,6 +114,39 @@ def init_db() -> sqlite3.Connection:
         CREATE TABLE IF NOT EXISTS bot_state (
             key     TEXT PRIMARY KEY,
             value   TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS sentiment_data (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            token_address   TEXT,
+            source          TEXT NOT NULL,     -- 'news', 'twitter', 'reddit', 'discord'
+            headline        TEXT,
+            sentiment_score REAL DEFAULT 0.0,  -- -1.0 (bearish) to +1.0 (bullish)
+            relevance_score REAL DEFAULT 0.0,  -- 0.0 to 1.0
+            raw_text        TEXT,
+            fetched_at      TEXT NOT NULL
+        );
+
+        CREATE TABLE IF NOT EXISTS manipulation_flags (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            token_address   TEXT NOT NULL,
+            flag_type       TEXT NOT NULL,     -- 'WASH_TRADE', 'PUMP_SCHEME', 'HONEYPOT', 'FAKE_VOLUME', 'COORDINATED'
+            severity        REAL DEFAULT 0.0,  -- 0.0 to 1.0
+            evidence        TEXT,              -- JSON description of evidence
+            wallet_addresses TEXT,             -- comma-separated involved wallets
+            detected_at     TEXT NOT NULL
+        );
+
+        CREATE TABLE IF NOT EXISTS technical_indicators (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            token_address   TEXT NOT NULL,
+            indicator_name  TEXT NOT NULL,     -- 'RSI', 'MACD', 'BBANDS', 'VOLUME_SMA'
+            value           REAL,
+            signal_value    REAL,             -- e.g. MACD signal line
+            upper_band      REAL,             -- e.g. Bollinger upper
+            lower_band      REAL,             -- e.g. Bollinger lower
+            timeframe       TEXT DEFAULT '1h',
+            computed_at     TEXT NOT NULL
         );
     """)
     conn.commit()
@@ -354,3 +390,164 @@ def get_performance_summary(conn: sqlite3.Connection) -> dict:
     )
     summary["virtual_cash_usd"] = get_virtual_cash(conn)
     return summary
+
+
+def insert_sentiment(conn: sqlite3.Connection, data: dict) -> int:
+    """Insert a sentiment data record and return its row id."""
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc).isoformat()
+    cursor = conn.execute(
+        """
+        INSERT INTO sentiment_data
+            (token_address, source, headline, sentiment_score,
+             relevance_score, raw_text, fetched_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            data.get("token_address"),
+            data.get("source", "unknown"),
+            data.get("headline"),
+            data.get("sentiment_score", 0.0),
+            data.get("relevance_score", 0.0),
+            data.get("raw_text"),
+            data.get("fetched_at", now),
+        ),
+    )
+    conn.commit()
+    return cursor.lastrowid
+
+
+def get_recent_sentiment(
+    conn: sqlite3.Connection,
+    token_address: str,
+    limit: int = 50,
+) -> list[dict]:
+    """Return recent sentiment records for a token."""
+    rows = conn.execute(
+        """
+        SELECT * FROM sentiment_data
+        WHERE token_address = ?
+        ORDER BY fetched_at DESC
+        LIMIT ?
+        """,
+        (token_address, limit),
+    ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def get_aggregate_sentiment(conn: sqlite3.Connection, token_address: str) -> float:
+    """Return the average sentiment score for a token (recent 50 entries)."""
+    row = conn.execute(
+        """
+        SELECT AVG(sentiment_score) AS avg_sentiment
+        FROM (
+            SELECT sentiment_score FROM sentiment_data
+            WHERE token_address = ?
+            ORDER BY fetched_at DESC
+            LIMIT 50
+        )
+        """,
+        (token_address,),
+    ).fetchone()
+    return float(row["avg_sentiment"]) if row and row["avg_sentiment"] is not None else 0.0
+
+
+def insert_manipulation_flag(conn: sqlite3.Connection, flag: dict) -> int:
+    """Insert a manipulation flag and return its row id."""
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc).isoformat()
+    cursor = conn.execute(
+        """
+        INSERT INTO manipulation_flags
+            (token_address, flag_type, severity, evidence,
+             wallet_addresses, detected_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        (
+            flag.get("token_address"),
+            flag.get("flag_type"),
+            flag.get("severity", 0.0),
+            flag.get("evidence"),
+            flag.get("wallet_addresses"),
+            flag.get("detected_at", now),
+        ),
+    )
+    conn.commit()
+    return cursor.lastrowid
+
+
+def get_manipulation_flags(
+    conn: sqlite3.Connection,
+    token_address: str,
+    hours: int = 24,
+) -> list[dict]:
+    """Return manipulation flags for a token from the last *hours*."""
+    interval = f"-{hours} hours"
+    rows = conn.execute(
+        """
+        SELECT * FROM manipulation_flags
+        WHERE token_address = ?
+          AND detected_at >= datetime('now', ?)
+        ORDER BY detected_at DESC
+        """,
+        (token_address, interval),
+    ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def is_token_flagged(conn: sqlite3.Connection, token_address: str, min_severity: float = 0.5) -> bool:
+    """Check if a token has recent high-severity manipulation flags."""
+    row = conn.execute(
+        """
+        SELECT COUNT(*) AS cnt FROM manipulation_flags
+        WHERE token_address = ?
+          AND severity >= ?
+          AND detected_at >= datetime('now', '-24 hours')
+        """,
+        (token_address, min_severity),
+    ).fetchone()
+    return (row["cnt"] or 0) > 0
+
+
+def insert_technical_indicator(conn: sqlite3.Connection, indicator: dict) -> int:
+    """Insert a technical indicator record and return its row id."""
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc).isoformat()
+    cursor = conn.execute(
+        """
+        INSERT INTO technical_indicators
+            (token_address, indicator_name, value, signal_value,
+             upper_band, lower_band, timeframe, computed_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            indicator.get("token_address"),
+            indicator.get("indicator_name"),
+            indicator.get("value"),
+            indicator.get("signal_value"),
+            indicator.get("upper_band"),
+            indicator.get("lower_band"),
+            indicator.get("timeframe", "1h"),
+            indicator.get("computed_at", now),
+        ),
+    )
+    conn.commit()
+    return cursor.lastrowid
+
+
+def get_latest_indicator(
+    conn: sqlite3.Connection,
+    token_address: str,
+    indicator_name: str,
+) -> Optional[dict]:
+    """Return the most recent value of a specific indicator for a token."""
+    row = conn.execute(
+        """
+        SELECT * FROM technical_indicators
+        WHERE token_address = ? AND indicator_name = ?
+        ORDER BY computed_at DESC
+        LIMIT 1
+        """,
+        (token_address, indicator_name),
+    ).fetchone()
+    return dict(row) if row else None

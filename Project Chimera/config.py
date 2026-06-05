@@ -65,6 +65,29 @@ PATTERN_CONSISTENCY_WIN_RATE = float(
     os.getenv("PATTERN_CONSISTENCY_WIN_RATE", "70.0")
 )
 
+# --- Risk Management ---
+RISK_KELLY_SAFETY_MULTIPLIER = float(os.getenv("RISK_KELLY_SAFETY_MULTIPLIER", "0.5"))   # half-Kelly
+RISK_TRAILING_STOP_PCT       = float(os.getenv("RISK_TRAILING_STOP_PCT",       "8.0"))   # trail 8% from peak
+RISK_MAX_DRAWDOWN_PCT        = float(os.getenv("RISK_MAX_DRAWDOWN_PCT",       "20.0"))   # circuit breaker at 20%
+RISK_MAX_CONSECUTIVE_LOSSES  = int(os.getenv("RISK_MAX_CONSECUTIVE_LOSSES",    "5"))      # circuit breaker
+
+# --- Sentiment Analysis ---
+SENTIMENT_BEARISH_THRESHOLD     = float(os.getenv("SENTIMENT_BEARISH_THRESHOLD",     "-0.3"))  # block if token < this
+SENTIMENT_MARKET_FEAR_THRESHOLD = float(os.getenv("SENTIMENT_MARKET_FEAR_THRESHOLD", "-0.5"))  # block all trading
+
+# --- Manipulation Detection ---
+MANIPULATION_BLOCK_SEVERITY     = float(os.getenv("MANIPULATION_BLOCK_SEVERITY",     "0.5"))   # block if severity >= this
+WASH_TRADE_WINDOW_SECS          = int(os.getenv("WASH_TRADE_WINDOW_SECS",            "60"))    # seconds
+PUMP_MIN_WALLETS                = int(os.getenv("PUMP_MIN_WALLETS",                  "5"))     # min wallets for pump
+PUMP_WINDOW_SECS                = int(os.getenv("PUMP_WINDOW_SECS",                 "180"))   # seconds
+COORDINATED_MIN_COOCCURRENCES   = int(os.getenv("COORDINATED_MIN_COOCCURRENCES",    "3"))     # min co-trades
+
+# --- Technical Indicators ---
+RSI_OVERSOLD            = float(os.getenv("RSI_OVERSOLD",            "30.0"))
+RSI_OVERBOUGHT          = float(os.getenv("RSI_OVERBOUGHT",          "70.0"))
+MOMENTUM_BUY_THRESHOLD  = float(os.getenv("MOMENTUM_BUY_THRESHOLD",  "5.0"))   # % ROC
+MOMENTUM_SELL_THRESHOLD = float(os.getenv("MOMENTUM_SELL_THRESHOLD", "-5.0"))   # % ROC
+
 # --- Bot Loop ---
 TRADING_LOOP_INTERVAL = int(os.getenv("TRADING_LOOP_INTERVAL", "300"))  # seconds between iterations
 
