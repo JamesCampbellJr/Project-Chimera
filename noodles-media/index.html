@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noodles Media – AI Solutions for Tomorrow</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════ NAV ═══════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">
+        <span class="logo-icon">🍜</span>
+        <span class="logo-text">Noodles <span class="accent">Media</span></span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#assessment">AI Finder</a></li>
+        <li><a href="#demos">Live Demos</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact" class="btn-nav">Get Started</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+  <section class="hero" id="hero">
+    <canvas id="particleCanvas"></canvas>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="pulse-dot"></span> Powered by Next-Gen AI
+      </div>
+      <h1 class="hero-title">
+        Intelligence <br />
+        <span class="gradient-text typewriter" id="typewriter"></span>
+      </h1>
+      <p class="hero-sub">
+        Noodles Media builds AI experiences that understand your business,
+        automate the mundane, and unlock possibilities you haven't imagined yet.
+      </p>
+      <div class="hero-cta">
+        <a href="#assessment" class="btn-primary">Find Your AI Solution</a>
+        <a href="#demos" class="btn-outline">Watch Demos</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num" data-target="500">0</span><span>+</span>
+          <p>AI Models Deployed</p>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num" data-target="98">0</span><span>%</span>
+          <p>Client Satisfaction</p>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num" data-target="12">0</span><span>x</span>
+          <p>Average ROI</p>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="orbit-ring ring-1">
+        <div class="orbit-icon" style="--angle:0deg">🤖</div>
+      </div>
+      <div class="orbit-ring ring-2">
+        <div class="orbit-icon" style="--angle:120deg">🧠</div>
+      </div>
+      <div class="orbit-ring ring-3">
+        <div class="orbit-icon" style="--angle:240deg">⚡</div>
+      </div>
+      <div class="core-sphere">
+        <div class="sphere-inner">NM</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ SERVICES ═══════════════════════════ -->
+  <section class="services" id="services">
+    <div class="section-header">
+      <span class="section-tag">What We Build</span>
+      <h2>AI Solutions Tailored <span class="gradient-text">to You</span></h2>
+      <p>From automation to generative AI — we cover every layer of the intelligence stack.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card" data-tilt>
+        <div class="service-icon">💬</div>
+        <h3>Conversational AI</h3>
+        <p>Custom chatbots and voice assistants that understand context, emotion, and intent — not just keywords.</p>
+        <ul class="service-features">
+          <li>Multi-turn dialogue</li>
+          <li>Sentiment-aware responses</li>
+          <li>Omnichannel deployment</li>
+        </ul>
+        <a href="#demos" class="service-link">See Demo →</a>
+      </div>
+      <div class="service-card featured" data-tilt>
+        <div class="featured-badge">Most Popular</div>
+        <div class="service-icon">✨</div>
+        <h3>Generative AI Studio</h3>
+        <p>Content, code, images, and data — generated at scale with your brand voice and style baked in.</p>
+        <ul class="service-features">
+          <li>Custom LLM fine-tuning</li>
+          <li>Brand-voice models</li>
+          <li>Multi-modal generation</li>
+        </ul>
+        <a href="#demos" class="service-link">See Demo →</a>
+      </div>
+      <div class="service-card" data-tilt>
+        <div class="service-icon">🔍</div>
+        <h3>Predictive Analytics</h3>
+        <p>Turn your data into decisions. Forecast demand, churn, and opportunity before they happen.</p>
+        <ul class="service-features">
+          <li>Time-series forecasting</li>
+          <li>Anomaly detection</li>
+          <li>Real-time dashboards</li>
+        </ul>
+        <a href="#demos" class="service-link">See Demo →</a>
+      </div>
+      <div class="service-card" data-tilt>
+        <div class="service-icon">⚙️</div>
+        <h3>Intelligent Automation</h3>
+        <p>AI-powered workflows that learn, adapt, and handle the repetitive work so your team can focus on what matters.</p>
+        <ul class="service-features">
+          <li>Document processing</li>
+          <li>Smart scheduling</li>
+          <li>Process mining</li>
+        </ul>
+        <a href="#demos" class="service-link">See Demo →</a>
+      </div>
+      <div class="service-card" data-tilt>
+        <div class="service-icon">👁️</div>
+        <h3>Computer Vision</h3>
+        <p>Give your systems the ability to see — quality control, security, medical imaging, retail analytics.</p>
+        <ul class="service-features">
+          <li>Object detection</li>
+          <li>Facial recognition</li>
+          <li>Scene understanding</li>
+        </ul>
+        <a href="#demos" class="service-link">See Demo →</a>
+      </div>
+      <div class="service-card" data-tilt>
+        <div class="service-icon">🛡️</div>
+        <h3>AI Security</h3>
+        <p>Protect your AI stack with adversarial robustness testing, model auditing, and continuous monitoring.</p>
+        <ul class="service-features">
+          <li>Red-team AI testing</li>
+          <li>Bias auditing</li>
+          <li>Compliance frameworks</li>
+        </ul>
+        <a href="#demos" class="service-link">See Demo →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ AI NEEDS ASSESSMENT ═══════════════════════════ -->
+  <section class="assessment" id="assessment">
+    <div class="assessment-bg"></div>
+    <div class="section-header">
+      <span class="section-tag">AI Finder™</span>
+      <h2>Discover Your Perfect <span class="gradient-text">AI Stack</span></h2>
+      <p>Answer 5 quick questions and we'll suggest the exact AI solutions your business needs.</p>
+    </div>
+
+    <div class="quiz-wrapper" id="quizWrapper">
+      <!-- Progress Bar -->
+      <div class="quiz-progress">
+        <div class="quiz-progress-bar" id="quizProgressBar" style="width:20%"></div>
+      </div>
+      <div class="quiz-step-label" id="quizStepLabel">Step 1 of 5</div>
+
+      <!-- Steps -->
+      <div class="quiz-steps" id="quizSteps">
+
+        <!-- Step 1 -->
+        <div class="quiz-step active" data-step="1">
+          <h3>What best describes your business?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="startup">🚀 Startup / Scale-up</button>
+            <button class="quiz-option" data-value="smb">🏢 Small-to-Mid Business</button>
+            <button class="quiz-option" data-value="enterprise">🏭 Enterprise</button>
+            <button class="quiz-option" data-value="agency">🎨 Agency / Creative Studio</button>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="quiz-step" data-step="2">
+          <h3>What's your primary challenge?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="content">📝 Creating content at scale</button>
+            <button class="quiz-option" data-value="support">🎧 Customer support overload</button>
+            <button class="quiz-option" data-value="data">📊 Making sense of data</button>
+            <button class="quiz-option" data-value="automation">🔄 Repetitive manual tasks</button>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="quiz-step" data-step="3">
+          <h3>How quickly do you need results?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="now">⚡ Yesterday (urgent)</button>
+            <button class="quiz-option" data-value="weeks">📅 Within a few weeks</button>
+            <button class="quiz-option" data-value="months">🗓️ 1-3 months</button>
+            <button class="quiz-option" data-value="strategic">🧭 Long-term strategic</button>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="quiz-step" data-step="4">
+          <h3>What's your AI experience level?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="none">🌱 Just getting started</button>
+            <button class="quiz-option" data-value="basic">📖 Basic tools in use</button>
+            <button class="quiz-option" data-value="intermediate">⚙️ Have in-house ML team</button>
+            <button class="quiz-option" data-value="advanced">🔬 Advanced, need cutting edge</button>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="quiz-step" data-step="5">
+          <h3>What's your primary goal?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="revenue">💰 Increase revenue</button>
+            <button class="quiz-option" data-value="efficiency">⚡ Reduce operational costs</button>
+            <button class="quiz-option" data-value="experience">❤️ Improve customer experience</button>
+            <button class="quiz-option" data-value="innovation">🔭 Drive innovation / R&D</button>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div class="quiz-step quiz-results" data-step="results">
+          <div class="results-header">
+            <div class="results-icon">🎯</div>
+            <h3>Your Personalized AI Roadmap</h3>
+            <p id="resultsIntro"></p>
+          </div>
+          <div class="results-cards" id="resultsCards"></div>
+          <button class="btn-primary" id="restartQuiz">Start Over</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ LIVE DEMOS ═══════════════════════════ -->
+  <section class="demos" id="demos">
+    <div class="section-header">
+      <span class="section-tag">Interactive Demos</span>
+      <h2>Try Our AI <span class="gradient-text">Live</span></h2>
+      <p>These demos run in your browser — no login required.</p>
+    </div>
+
+    <div class="demo-tabs">
+      <button class="demo-tab active" data-demo="chatbot">💬 AI Chat</button>
+      <button class="demo-tab" data-demo="sentiment">❤️ Sentiment</button>
+      <button class="demo-tab" data-demo="generator">✍️ Content Gen</button>
+      <button class="demo-tab" data-demo="classifier">🏷️ Classifier</button>
+    </div>
+
+    <!-- Chatbot Demo -->
+    <div class="demo-panel active" id="demo-chatbot">
+      <div class="demo-card">
+        <div class="chat-window" id="chatWindow">
+          <div class="chat-message bot">
+            <div class="chat-avatar bot-avatar">🤖</div>
+            <div class="chat-bubble">
+              Hi! I'm NoodleBot, your AI guide. Ask me anything about AI solutions for your business — or try: <em>"What can AI do for my marketing?"</em>
+            </div>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <input type="text" id="chatInput" placeholder="Type your question..." maxlength="300" />
+          <button id="chatSend" class="btn-send" aria-label="Send">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+        <div class="chat-suggestions">
+          <button class="suggestion-chip" data-text="What AI solution is best for customer support?">Customer support AI</button>
+          <button class="suggestion-chip" data-text="How can AI help with content creation?">Content creation</button>
+          <button class="suggestion-chip" data-text="Tell me about predictive analytics">Predictive analytics</button>
+          <button class="suggestion-chip" data-text="What's your pricing?">Pricing info</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sentiment Demo -->
+    <div class="demo-panel" id="demo-sentiment">
+      <div class="demo-card">
+        <h3 class="demo-title">Sentiment & Emotion Analyzer</h3>
+        <p class="demo-desc">Paste any customer review, tweet, or message — our AI will analyze the emotion and key themes in milliseconds.</p>
+        <textarea id="sentimentInput" placeholder="Paste text here, e.g., 'The product was fantastic but delivery took forever and customer service was rude.'" rows="4" maxlength="600"></textarea>
+        <button class="btn-primary" id="analyzeSentiment">Analyze Sentiment</button>
+        <div class="sentiment-result" id="sentimentResult"></div>
+      </div>
+    </div>
+
+    <!-- Content Generator Demo -->
+    <div class="demo-panel" id="demo-generator">
+      <div class="demo-card">
+        <h3 class="demo-title">AI Content Generator</h3>
+        <p class="demo-desc">Select a content type, enter your topic, and watch our AI generate high-quality copy instantly.</p>
+        <div class="generator-controls">
+          <select id="contentType">
+            <option value="tagline">🏷️ Brand Tagline</option>
+            <option value="email">📧 Marketing Email</option>
+            <option value="social">📱 Social Media Post</option>
+            <option value="blog">📝 Blog Intro</option>
+            <option value="ad">📢 Ad Copy</option>
+          </select>
+          <input type="text" id="contentTopic" placeholder="e.g., eco-friendly coffee brand" maxlength="100" />
+        </div>
+        <button class="btn-primary" id="generateContent">Generate ✨</button>
+        <div class="generator-result" id="generatorResult">
+          <div class="result-placeholder">Your generated content will appear here…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Classifier Demo -->
+    <div class="demo-panel" id="demo-classifier">
+      <div class="demo-card">
+        <h3 class="demo-title">Smart Text Classifier</h3>
+        <p class="demo-desc">Our AI classifies text into categories in real time — perfect for support ticket routing, content tagging, or lead scoring.</p>
+        <input type="text" id="classifierInput" placeholder="e.g., 'My invoice is wrong and I need a refund ASAP'" maxlength="300" />
+        <div class="classifier-categories" id="classifierCategories">
+          <label><input type="checkbox" value="support" checked /> Support</label>
+          <label><input type="checkbox" value="billing" checked /> Billing</label>
+          <label><input type="checkbox" value="sales" checked /> Sales</label>
+          <label><input type="checkbox" value="technical" checked /> Technical</label>
+          <label><input type="checkbox" value="feedback" checked /> Feedback</label>
+        </div>
+        <button class="btn-primary" id="classifyText">Classify</button>
+        <div class="classifier-result" id="classifierResult"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ PROCESS ═══════════════════════════ -->
+  <section class="process" id="process">
+    <div class="section-header">
+      <span class="section-tag">How It Works</span>
+      <h2>From Idea to <span class="gradient-text">Intelligent Product</span></h2>
+    </div>
+    <div class="process-steps">
+      <div class="process-step" data-aos="fade-up">
+        <div class="step-number">01</div>
+        <div class="step-content">
+          <h3>Discover</h3>
+          <p>We map your business processes, pain points, and data landscape to identify the highest-ROI AI opportunities.</p>
+        </div>
+      </div>
+      <div class="process-connector"></div>
+      <div class="process-step" data-aos="fade-up" style="--delay:0.1s">
+        <div class="step-number">02</div>
+        <div class="step-content">
+          <h3>Design</h3>
+          <p>Rapid prototyping and architecture planning — we show you a working proof-of-concept before writing a single line of production code.</p>
+        </div>
+      </div>
+      <div class="process-connector"></div>
+      <div class="process-step" data-aos="fade-up" style="--delay:0.2s">
+        <div class="step-number">03</div>
+        <div class="step-content">
+          <h3>Build</h3>
+          <p>Agile AI development with continuous testing, model evaluation, and your team involved every step of the way.</p>
+        </div>
+      </div>
+      <div class="process-connector"></div>
+      <div class="process-step" data-aos="fade-up" style="--delay:0.3s">
+        <div class="step-number">04</div>
+        <div class="step-content">
+          <h3>Launch & Grow</h3>
+          <p>Deployment, monitoring, retraining, and ongoing optimization — we're your AI partner, not just a vendor.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ ABOUT ═══════════════════════════ -->
+  <section class="about" id="about">
+    <div class="about-content">
+      <div class="about-text">
+        <span class="section-tag">Who We Are</span>
+        <h2>Humans who <span class="gradient-text">build machines</span> that think</h2>
+        <p>
+          Noodles Media was born from a simple idea: AI should feel like a natural extension
+          of your team, not an alien technology bolted on. We're a crew of engineers,
+          designers, and AI researchers obsessed with making intelligence accessible,
+          practical, and genuinely useful.
+        </p>
+        <p>
+          Like a perfectly tangled bowl of noodles, the best AI systems are deeply
+          interconnected — every layer supporting every other. That's how we build.
+        </p>
+        <div class="about-highlights">
+          <div class="highlight">
+            <span class="highlight-icon">🌍</span>
+            <div>
+              <strong>Global Clients</strong>
+              <p>30+ countries served</p>
+            </div>
+          </div>
+          <div class="highlight">
+            <span class="highlight-icon">🏆</span>
+            <div>
+              <strong>Award Winning</strong>
+              <p>AI Innovation Award 2024</p>
+            </div>
+          </div>
+          <div class="highlight">
+            <span class="highlight-icon">🔬</span>
+            <div>
+              <strong>Research-Driven</strong>
+              <p>3 published AI papers</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="about-visual">
+        <div class="tech-stack">
+          <div class="tech-badge">GPT-4o</div>
+          <div class="tech-badge">Claude 3</div>
+          <div class="tech-badge">Gemini</div>
+          <div class="tech-badge">LangChain</div>
+          <div class="tech-badge">PyTorch</div>
+          <div class="tech-badge">TensorFlow</div>
+          <div class="tech-badge">Hugging Face</div>
+          <div class="tech-badge">OpenAI API</div>
+          <div class="tech-badge">RAG</div>
+          <div class="tech-badge">Vector DB</div>
+          <div class="tech-badge">CrewAI</div>
+          <div class="tech-badge">Vertex AI</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ TESTIMONIALS ═══════════════════════════ -->
+  <section class="testimonials" id="testimonials">
+    <div class="section-header">
+      <span class="section-tag">Social Proof</span>
+      <h2>Clients <span class="gradient-text">Love Us</span></h2>
+    </div>
+    <div class="testimonial-track" id="testimonialTrack">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"Noodles Media built us a conversational AI that handles 70% of our support tickets. Our team now focuses on the real challenges."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">SC</div>
+          <div>
+            <strong>Sarah Chen</strong>
+            <span>VP Product, TechFlow Inc.</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"The predictive analytics platform they built for us literally predicted our Q4 demand surge 6 weeks early. Mind-blowing accuracy."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">MR</div>
+          <div>
+            <strong>Marcus Rodriguez</strong>
+            <span>COO, RetailPlus</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"From day one they understood our brand voice. The AI-generated content is indistinguishable from what our best writers produce."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">AK</div>
+          <div>
+            <strong>Aisha Kamara</strong>
+            <span>CMO, GreenLeaf Media</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"Best investment we've made. Our document processing time went from 3 days to 4 hours. The ROI paid for the project in month 2."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">JP</div>
+          <div>
+            <strong>James Park</strong>
+            <span>Director of Ops, LegalEdge</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-controls">
+      <button class="t-btn" id="tPrev">←</button>
+      <div class="t-dots" id="tDots"></div>
+      <button class="t-btn" id="tNext">→</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ CONTACT / CTA ═══════════════════════════ -->
+  <section class="contact" id="contact">
+    <div class="contact-content">
+      <div class="contact-text">
+        <span class="section-tag">Get Started</span>
+        <h2>Ready to add <span class="gradient-text">intelligence</span> to your business?</h2>
+        <p>Tell us about your challenge. We'll respond within one business day with ideas and a free consultation.</p>
+        <div class="contact-info">
+          <div class="contact-item">
+            <span>📧</span> hello@noodlesmedia.ai
+          </div>
+          <div class="contact-item">
+            <span>📍</span> San Francisco · New York · London
+          </div>
+          <div class="contact-item">
+            <span>🕐</span> Response within 24 hours
+          </div>
+        </div>
+      </div>
+      <form class="contact-form" id="contactForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" placeholder="Jane" required />
+          </div>
+          <div class="form-group">
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" placeholder="Doe" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Work Email</label>
+          <input type="email" id="email" placeholder="jane@company.com" required />
+        </div>
+        <div class="form-group">
+          <label for="company">Company</label>
+          <input type="text" id="company" placeholder="Acme Corp" />
+        </div>
+        <div class="form-group">
+          <label for="interest">I'm interested in…</label>
+          <select id="interest">
+            <option value="">Select a service</option>
+            <option>Conversational AI</option>
+            <option>Generative AI Studio</option>
+            <option>Predictive Analytics</option>
+            <option>Intelligent Automation</option>
+            <option>Computer Vision</option>
+            <option>AI Security</option>
+            <option>Custom Solution</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Tell us about your challenge</label>
+          <textarea id="message" rows="4" placeholder="Describe your current pain points and what you'd like AI to help with…" required></textarea>
+        </div>
+        <button type="submit" class="btn-primary btn-full">Send Message 🚀</button>
+        <div class="form-success" id="formSuccess" style="display:none">
+          ✅ Message sent! We'll be in touch within 24 hours.
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="logo-icon">🍜</span>
+        <span class="logo-text">Noodles <span class="accent">Media</span></span>
+        <p>Making intelligence accessible, practical, and genuinely useful.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Conversational AI</a></li>
+          <li><a href="#services">Generative AI</a></li>
+          <li><a href="#services">Predictive Analytics</a></li>
+          <li><a href="#services">Automation</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#testimonials">Case Studies</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">AI Ethics Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Noodles Media Inc. All rights reserved. Built with ❤️ and 🤖</p>
+    </div>
+  </footer>
+
+  <!-- Back to top -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
